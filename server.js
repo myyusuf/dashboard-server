@@ -41,7 +41,7 @@ require('./app/routes.js')(app, passport, db); // load our routes and pass in ou
 var myhandlebars = require('express-handlebars');
 
 var handlebars = myhandlebars.create({
-		defaultLayout:'workspace',
+		defaultLayout:'',
 		helpers: {
         foo: function () { return 'FOO!'; },
         bar: function () { return 'BAR!'; },

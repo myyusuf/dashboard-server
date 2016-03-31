@@ -3,12 +3,7 @@ module.exports = function(app, passport, db) {
   // =====================================
   // HOME PAGE (with login links) ========
   // =====================================
-  app.get('/', function(req, res) {
-    //res.render('index.handlebars'); // load the index.ejs file
 
-    //		res.render('dashboard.handlebars');
-    res.redirect('/dashboard');
-  });
 
   // =====================================
   // LOGIN ===============================
@@ -26,7 +21,7 @@ module.exports = function(app, passport, db) {
   // process the login form
   app.post('/login', passport.authenticate('local-login', {
     // successRedirect : '/profile', // redirect to the secure profile section
-    successRedirect: '/dashboard', // redirect to the secure profile section
+    successRedirect: '/', // redirect to the secure profile section
     failureRedirect: '/login', // redirect back to the signup page if there is an error
     failureFlash: true // allow flash messages
   }));
@@ -70,7 +65,7 @@ module.exports = function(app, passport, db) {
     res.redirect('/login');
   });
 
-  app.get('/dashboard', isLoggedIn, function(req, res) {
+  app.get('/', isLoggedIn, function(req, res) {
     res.render('dashboard.handlebars', {
       currentPageView: 'dashboard',
       user: req.user // get the user out of session and pass to template
