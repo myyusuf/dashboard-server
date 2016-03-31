@@ -17,9 +17,6 @@ exports.netProfit = function(req, res, db) {
     function(err, rows) {
       if (err) throw err;
 
-      console.log('_year :  ' + _year);
-      console.log('_month :  ' + _month);
-
       if (rows.length > 0) {
         var _row = rows[0];
         _result.month = _row.bulan;
@@ -42,8 +39,8 @@ exports.projectInfo = function(req, res, db) {
   var _result = {
     month: _month,
     year: _year,
-    projectCount: 27,
-    lateProjectCount: 9
+    projectCount: 0,
+    lateProjectCount: 0
   }
 
   var query = "SELECT * FROM progress WHERE tahun=? and bulan=?";
@@ -73,6 +70,83 @@ exports.projectInfo = function(req, res, db) {
 
       res.json(_result);
 
+    }
+  );
+};
+
+exports.scoreCard = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var _result = {
+    month: _month,
+    year: _year,
+    total: 0,
+    target: 0
+  }
+
+  var query = "SELECT * FROM total_score_card_wg WHERE tahun=? and bulan=?";
+  var _target = 0;
+  var _total = 0;
+
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+
+      if (rows.length > 0) {
+        var _row = rows[0];
+        _result.month = _month;
+        _result.year = _year;
+        _result.total = _row.score;
+
+        db.query(
+          "SELECT * FROM score_target WHERE parameter = 'SCORE_CARD_WG' ", [],
+          function(err, rows) {
+            if (err) throw err;
+
+            if (rows.length > 0) {
+              var _row = rows[0];
+              _result.target = _row.score_target;
+            }
+            res.json(_result);
+          }
+        );
+      }else{
+        res.json(_result);
+      }
+    }
+  );
+};
+
+exports.riskInfo = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var _result = {
+    month: _month,
+    year: _year,
+    extremeRiskCount: 0,
+    riskCount: 0
+  }
+
+  var query = "SELECT * FROM manajemen_risiko WHERE tahun=? and bulan=?";
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+      if (rows.length > 0) {
+        var _row = rows[0];
+        _result.month = _row.bulan;
+        _result.year = _row.tahun;
+        _result.extremeRiskCount = _row.jumlah_nilai_risiko_ekstrim;
+        _result.riskCount = _row.jumlah_nilai_risiko;
+      }
+      res.json(_result);
     }
   );
 };

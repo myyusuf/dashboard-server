@@ -74,12 +74,23 @@ module.exports = function(app, passport, db) {
     });
   });
 
+  // =====================================
+  // Summary Data ========================
+  // =====================================
   app.get('/summarydata/net-profit/:year/:month', function(req, res) {
     summaryData.netProfit(req, res, db);
   });
 
   app.get('/summarydata/project-info/:year/:month', function(req, res) {
     summaryData.projectInfo(req, res, db);
+  });
+
+  app.get('/summarydata/score-card/:year/:month', function(req, res) {
+    summaryData.scoreCard(req, res, db);
+  });
+
+  app.get('/summarydata/risk-info/:year/:month', function(req, res) {
+    summaryData.riskInfo(req, res, db);
   });
 
 };
