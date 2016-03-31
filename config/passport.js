@@ -4,7 +4,7 @@
 var LocalStrategy   = require('passport-local').Strategy;
 
 // load up the user model
-var User       		= require('../app/models/user');
+// var User       		= require('../app/models/user');
 
 // expose this function to our app using module.exports
 module.exports = function(passport) {
@@ -22,9 +22,12 @@ module.exports = function(passport) {
 
     // used to deserialize the user
     passport.deserializeUser(function(id, done) {
-        User.findById(id, function(err, user) {
+        /*User.findById(id, function(err, user) {
             done(err, user);
-        });
+        });*/
+
+        var user = {id: 1, email: 'test@gmail.com', password: 'admin'};
+        return done(null, user);
     });
 
  	// =========================================================================
@@ -41,7 +44,7 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) {
 
-      var newUser = {email: 'test@gmail.com', password: 'admin'};
+      var newUser = {id: 1, email: 'test@gmail.com', password: 'admin'};
 
       return done(null, newUser);
 
@@ -91,7 +94,7 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) { // callback with email and password from our form
 
-      var user = {email: 'test@gmail.com', password: 'admin'};
+      var user = {id: 1, email: 'test@gmail.com', password: 'admin'};
       return done(null, user);
 
       // find a user whose email is the same as the forms email
