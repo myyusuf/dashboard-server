@@ -75,7 +75,11 @@ module.exports = function(app, passport, db) {
   });
 
   app.get('/summarydata/net-profit/:year/:month', function(req, res) {
-    summaryData.netProfitList(req, res, db);
+    summaryData.netProfit(req, res, db);
+  });
+
+  app.get('/summarydata/project-info/:year/:month', function(req, res) {
+    summaryData.projectInfo(req, res, db);
   });
 
 };
