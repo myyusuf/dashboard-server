@@ -26,7 +26,7 @@ module.exports = function(passport) {
             done(err, user);
         });*/
 
-        var user = {id: 1, email: 'test@gmail.com', password: 'admin'};
+        var user = {id: 1, email: 'iedfian.taufiq.akbar@gmail.com', password: 'admin'};
         return done(null, user);
     });
 
@@ -44,7 +44,7 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) {
 
-      var newUser = {id: 1, email: 'test@gmail.com', password: 'admin'};
+      var newUser = {id: 1, email: 'iedfian.taufiq.akbar@gmail.com', password: 'admin'};
 
       return done(null, newUser);
 
@@ -94,7 +94,7 @@ module.exports = function(passport) {
     },
     function(req, email, password, done) { // callback with email and password from our form
 
-      var user = {id: 1, email: 'test@gmail.com', password: 'admin'};
+      var user = {id: 1, email: 'iedfian.taufiq.akbar@gmail.com', password: 'admin'};
       return done(null, user);
 
       // find a user whose email is the same as the forms email

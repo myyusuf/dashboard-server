@@ -1,3 +1,5 @@
+var summaryData = require('./handlers/summarydata.js');
+
 module.exports = function(app, passport, db) {
 
   // =====================================
@@ -70,6 +72,10 @@ module.exports = function(app, passport, db) {
       currentPageView: 'dashboard',
       user: req.user // get the user out of session and pass to template
     });
+  });
+
+  app.get('/summarydata/net-profit/:year/:month', function(req, res) {
+    summaryData.netProfitList(req, res, db);
   });
 
 };
