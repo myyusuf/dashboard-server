@@ -262,11 +262,12 @@ exports.wgPropertyList = function(req, res, db) {
         var _wgProperty = {
 
           unitName: _row.unit,
-          unitCountThisMonth: _row.penjualan_bulan_ini,
-          unitSoldCountThisMonth: _row.unit_terjual_bulan_ini,
-          totalUnit: _row.total_unit,
-          unitCountUntilThisMonth: _row.penjualan_hingga_bulan_ini,
-          unitSoldCountUntilThisMonth: _row.unit_terjual_hingga_bulan_ini
+          unitCountThisMonth: _row.unit_terjual_bulan_ini,
+          unitCountUntilThisMonth: _row.unit_terjual_hingga_bulan_ini,
+          unitSoldCountThisMonth: _row.penjualan_bulan_ini,
+          unitSoldCountUntilThisMonth: _row.penjualan_hingga_bulan_ini,
+          totalUnit: _row.total_unit
+
         }
 
         _result.push(_wgProperty);
