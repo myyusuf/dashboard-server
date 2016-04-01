@@ -198,8 +198,8 @@ exports.salesChartData = function(req, res, db) {
         var _row = rows[_i];
         _result.push({
           month: _getMonth(_row.bulan),
-          plan: _row.rencana != null? (_row.rencana / _divider) : null,
-          actual: _row.realisasi != null? (_row.realisasi / _divider) : null,
+          plan: _row.rencana != null ? (_row.rencana / _divider) : null,
+          actual: _row.realisasi != null ? (_row.realisasi / _divider) : null,
         });
       }
 
@@ -230,10 +230,10 @@ exports.financialChartData = function(req, res, db) {
         var _row = rows[_i];
         _result.push({
           bulan: _getMonth(_row.bulan),
-          penjualanRa: _row.penjualan_ra != null? (_row.penjualan_ra / _divider) : null,
-          penjualanRi: _row.penjualan_ri != null? (_row.penjualan_ri / _divider) : null,
-          piutangUsaha: _row.piutang_usaha != null? (_row.piutang_usaha / _divider) : null,
-          tagihanBruto: _row.tagihan_brutto != null? (_row.tagihan_brutto / _divider) : null,
+          penjualanRa: _row.penjualan_ra != null ? (_row.penjualan_ra / _divider) : null,
+          penjualanRi: _row.penjualan_ri != null ? (_row.penjualan_ri / _divider) : null,
+          piutangUsaha: _row.piutang_usaha != null ? (_row.piutang_usaha / _divider) : null,
+          tagihanBruto: _row.tagihan_brutto != null ? (_row.tagihan_brutto / _divider) : null,
         });
       }
 
@@ -242,3 +242,113 @@ exports.financialChartData = function(req, res, db) {
     }
   );
 };
+
+exports.wgPropertyList = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var query = "SELECT * FROM property WHERE tahun=? and bulan=?";
+
+  _result = [];
+
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+      for (var _i in rows) {
+        var _row = rows[_i];
+        var _wgProperty = {
+
+          unitName: _row.unit,
+          unitCountThisMonth: _row.penjualan_bulan_ini,
+          unitSoldCountThisMonth: _row.unit_terjual_bulan_ini,
+          totalUnit: _row.total_unit,
+          unitCountUntilThisMonth: _row.penjualan_hingga_bulan_ini,
+          unitSoldCountUntilThisMonth: _row.unit_terjual_hingga_bulan_ini
+        }
+
+        _result.push(_wgProperty);
+
+      }
+
+      res.json(_result);
+
+    }
+  );
+}
+
+exports.smwg = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var _result = {
+    qmsl: 0,
+    sheLevel: 0,
+    limaR: 0,
+    scoreTarget: {},
+    projectCount: {
+      qmsl: 0,
+      sheLevel: 0,
+      limaR: 0,
+    }
+  }
+
+  var _scoreTarget = {
+    qmsl: 0,
+    sheLevel: 0,
+    limaR: 0,
+  }
+
+  db.query("SELECT * FROM score_target WHERE parameter in ('QMSL', 'SHE_LEVEL', '5R') ", [],
+    function(err, rows) {
+      if (err) throw err;
+
+      for (var _i in rows) {
+        var _row = rows[_i];
+        if (_row.parameter == 'QMSL') {
+          _scoreTarget.qmsl = _row.score_target;
+        } else if (_row.parameter == 'SHE_LEVEL') {
+          _scoreTarget.sheLevel = _row.score_target;
+        } else if (_row.parameter == '5R') {
+          _scoreTarget.limaR = _row.score_target;
+        }
+      }
+
+      var query = "SELECT * FROM smwg WHERE tahun=? and bulan=?";
+      db.query(
+        query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+          for (var _i in rows) {
+            var _row = rows[_i];
+            if (_row.parameter_smwg == 'QMSL') {
+              if (_row.score >= _scoreTarget.qmsl) {
+                _result.qmsl++;
+              }
+              _result.projectCount.qmsl++;
+            } else if (_row.parameter_smwg == 'SHE_LEVEL') {
+              if (_row.score >= _scoreTarget.sheLevel) {
+                _result.sheLevel++;
+              }
+              _result.projectCount.sheLevel++;
+            } else if (_row.parameter_smwg == '5R') {
+              if (_row.score >= _scoreTarget.limaR) {
+                _result.limaR++;
+              }
+              _result.projectCount.limaR++;
+            }
+          }
+
+          _result.scoreTarget = _scoreTarget;
+
+          res.json(_result);
+
+        }
+      );
+
+    }
+  );
+}

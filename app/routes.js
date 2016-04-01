@@ -101,6 +101,14 @@ module.exports = function(app, passport, db) {
     summaryData.salesChartData(req, res, db);
   });
 
+  app.get('/summarydata/wg-property-list/:year/:month', function(req, res) {
+    summaryData.wgPropertyList(req, res, db);
+  });
+
+  app.get('/summarydata/smwg/:year/:month', function(req, res) {
+    summaryData.smwg(req, res, db);
+  });
+
 };
 
 // route middleware to make sure
