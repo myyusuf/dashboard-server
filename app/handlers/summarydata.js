@@ -3,10 +3,19 @@ exports.netProfit = function(req, res, db) {
   var _year = req.params.year;
   var _month = req.params.month;
 
+  var _prevYear = parseInt(_year);
+  var _prevMonth = parseInt(_month) - 1;
+
+  if (_prevMonth == 0) {
+    _prevMonth = 12;
+    _prevYear = _prevYear - 1;
+  }
+
   var _result = {
     month: _month,
     year: _year,
     netProfit: 0,
+    prevNetProfit: 0,
     rkap: 0
   }
 
@@ -25,7 +34,22 @@ exports.netProfit = function(req, res, db) {
         _result.rkap = _row.rkap;
       }
 
-      res.json(_result);
+      var _query = "SELECT * FROM laba_bersih WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_prevYear, _prevMonth],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _result.prevNetProfit = _row.laba_bersih;
+          }
+          
+          res.json(_result);
+
+        }
+      );
 
     }
   );
