@@ -93,6 +93,14 @@ module.exports = function(app, passport, db) {
     summaryData.riskInfo(req, res, db);
   });
 
+  app.get('/summarydata/financial/:year', function(req, res) {
+    summaryData.financialChartData(req, res, db);
+  });
+
+  app.get('/summarydata/sales/:year', function(req, res) {
+    summaryData.salesChartData(req, res, db);
+  });
+
 };
 
 // route middleware to make sure

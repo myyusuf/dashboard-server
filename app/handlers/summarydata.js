@@ -114,7 +114,7 @@ exports.scoreCard = function(req, res, db) {
             res.json(_result);
           }
         );
-      }else{
+      } else {
         res.json(_result);
       }
     }
@@ -147,6 +147,98 @@ exports.riskInfo = function(req, res, db) {
         _result.riskCount = _row.jumlah_nilai_risiko;
       }
       res.json(_result);
+    }
+  );
+};
+
+var _getMonth = function(month) {
+  if (month === '1' || month === '01') {
+    return 'Jan'
+  } else if (month === '2' || month === '02') {
+    return 'Feb'
+  } else if (month === '3' || month === '03') {
+    return 'Mar'
+  } else if (month === '4' || month === '04') {
+    return 'Apr'
+  } else if (month === '5' || month === '05') {
+    return 'Mei'
+  } else if (month === '6' || month === '06') {
+    return 'Jun'
+  } else if (month === '7' || month === '07') {
+    return 'Jul'
+  } else if (month === '8' || month === '08') {
+    return 'Ags'
+  } else if (month === '9' || month === '09') {
+    return 'Sep'
+  } else if (month === '10' || month === '10') {
+    return 'Okt'
+  } else if (month === '11' || month === '11') {
+    return 'Nov'
+  } else if (month === '12' || month === '12') {
+    return 'Des'
+  }
+}
+
+exports.salesChartData = function(req, res, db) {
+
+  var _year = req.params.year;
+  //    var _month = req.params.month;
+
+  var _divider = 1000000000;
+
+  var query = "SELECT * FROM omzet_kontrak WHERE tahun=?";
+  db.query(
+    query, [_year],
+    function(err, rows) {
+      if (err) throw err;
+
+      var _result = [];
+
+      for (var _i in rows) {
+        var _row = rows[_i];
+        _result.push({
+          month: _getMonth(_row.bulan),
+          plan: _row.rencana != null? (_row.rencana / _divider) : null,
+          actual: _row.realisasi != null? (_row.realisasi / _divider) : null,
+        });
+      }
+
+      res.json(_result);
+
+    }
+  );
+};
+
+exports.financialChartData = function(req, res, db) {
+
+  var _year = req.params.year;
+  //    var _month = req.params.month;
+
+  var _divider = 1000000000;
+
+  var query = "SELECT * FROM laporan_keuangan WHERE tahun=?";
+  db.query(
+    query, [_year],
+    function(err, rows) {
+      if (err) throw err;
+
+      console.log('_year x:  ' + _year);
+
+      var _result = [];
+
+      for (var _i in rows) {
+        var _row = rows[_i];
+        _result.push({
+          bulan: _getMonth(_row.bulan),
+          penjualanRa: _row.penjualan_ra != null? (_row.penjualan_ra / _divider) : null,
+          penjualanRi: _row.penjualan_ri != null? (_row.penjualan_ri / _divider) : null,
+          piutangUsaha: _row.piutang_usaha != null? (_row.piutang_usaha / _divider) : null,
+          tagihanBruto: _row.tagihan_brutto != null? (_row.tagihan_brutto / _divider) : null,
+        });
+      }
+
+      res.json(_result);
+
     }
   );
 };
