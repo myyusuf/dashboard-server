@@ -1,4 +1,5 @@
 var summaryData = require('./handlers/summarydata.js');
+var summaryPdf = require('./handlers/summarypdf.js');
 
 module.exports = function(app, passport, db) {
 
@@ -107,6 +108,10 @@ module.exports = function(app, passport, db) {
 
   app.get('/summarydata/smwg/:year/:month', function(req, res) {
     summaryData.smwg(req, res, db);
+  });
+
+  app.get('/showpdf/:fileName/:year/:month/:dummy', function(req, res) {
+    summaryPdf.downloadPdf(req, res, db);
   });
 
 };
