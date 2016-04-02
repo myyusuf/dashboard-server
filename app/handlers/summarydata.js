@@ -232,10 +232,19 @@ exports.riskInfo = function(req, res, db) {
   var _year = req.params.year;
   var _month = req.params.month;
 
+  var _prevYear = parseInt(_year);
+  var _prevMonth = parseInt(_month) - 1;
+
+  if (_prevMonth == 0) {
+    _prevMonth = 12;
+    _prevYear = _prevYear - 1;
+  }
+
   var _result = {
     month: _month,
     year: _year,
     extremeRiskCount: 0,
+    prevExtremeRiskCount: 0,
     riskCount: 0
   }
 
@@ -252,7 +261,20 @@ exports.riskInfo = function(req, res, db) {
         _result.extremeRiskCount = _row.jumlah_nilai_risiko_ekstrim;
         _result.riskCount = _row.jumlah_nilai_risiko;
       }
-      res.json(_result);
+
+      var query = "SELECT * FROM manajemen_risiko WHERE tahun=? and bulan=?";
+      db.query(
+        query, [_prevYear, _prevMonth],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _result.prevExtremeRiskCount = _row.jumlah_nilai_risiko_ekstrim;
+          }
+          res.json(_result);
+        }
+      );
     }
   );
 };
