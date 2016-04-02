@@ -45,7 +45,7 @@ exports.netProfit = function(req, res, db) {
             var _row = rows[0];
             _result.prevNetProfit = _row.laba_bersih;
           }
-          
+
           res.json(_result);
 
         }
@@ -60,16 +60,26 @@ exports.projectInfo = function(req, res, db) {
   var _year = req.params.year;
   var _month = req.params.month;
 
+  var _prevYear = parseInt(_year);
+  var _prevMonth = parseInt(_month) - 1;
+
+  if (_prevMonth == 0) {
+    _prevMonth = 12;
+    _prevYear = _prevYear - 1;
+  }
+
   var _result = {
     month: _month,
     year: _year,
     projectCount: 0,
-    lateProjectCount: 0
+    lateProjectCount: 0,
+    prevLateProjectCount: 0
   }
 
   var query = "SELECT * FROM progress WHERE tahun=? and bulan=?";
   var _projectCount = 0;
   var _lateProjectCount = 0;
+  var _prevLateProjectCount = 0;
 
   db.query(
     query, [_year, _month],
@@ -92,7 +102,26 @@ exports.projectInfo = function(req, res, db) {
         _result.lateProjectCount = _lateProjectCount;
       }
 
-      res.json(_result);
+      db.query(
+        query, [_prevYear, _prevMonth],
+        function(err, rows) {
+          if (err) throw err;
+
+          for (var _i in rows) {
+            var _row = rows[_i];
+            if (parseFloat(_row.progress_ra) > parseFloat(_row.progress_ri)) {
+              _prevLateProjectCount++;
+            }
+          }
+
+          if (rows.length > 0) {
+            _result.prevLateProjectCount = _prevLateProjectCount;
+          }
+
+          res.json(_result);
+
+        }
+      );
 
     }
   );
