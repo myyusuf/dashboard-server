@@ -132,22 +132,28 @@ exports.scoreCard = function(req, res, db) {
   var _year = req.params.year;
   var _month = req.params.month;
 
+  var _prevYear = parseInt(_year);
+  var _prevMonth = parseInt(_month) - 1;
+
+  if (_prevMonth == 0) {
+    _prevMonth = 12;
+    _prevYear = _prevYear - 1;
+  }
+
   var _result = {
     month: _month,
     year: _year,
     total: 0,
+    prevTotal: 0,
     target: 0
   }
 
   var query = "SELECT * FROM total_score_card_wg WHERE tahun=? and bulan=?";
-  var _target = 0;
-  var _total = 0;
 
   db.query(
     query, [_year, _month],
     function(err, rows) {
       if (err) throw err;
-
 
       if (rows.length > 0) {
         var _row = rows[0];
@@ -164,11 +170,58 @@ exports.scoreCard = function(req, res, db) {
               var _row = rows[0];
               _result.target = _row.score_target;
             }
-            res.json(_result);
+
+            var query = "SELECT * FROM total_score_card_wg WHERE tahun=? and bulan=?";
+
+            db.query(
+              query, [_prevYear, _prevMonth],
+              function(err, rows) {
+                if (err) throw err;
+
+                if (rows.length > 0) {
+                  var _row = rows[0];
+                  _result.prevTotal = _row.score;
+                }
+
+                res.json(_result);
+
+              }
+            );
+
           }
         );
       } else {
-        res.json(_result);
+
+        db.query(
+          "SELECT * FROM score_target WHERE parameter = 'SCORE_CARD_WG' ", [],
+          function(err, rows) {
+            if (err) throw err;
+
+            if (rows.length > 0) {
+              var _row = rows[0];
+              _result.target = _row.score_target;
+            }
+
+            var query = "SELECT * FROM total_score_card_wg WHERE tahun=? and bulan=?";
+
+            db.query(
+              query, [_prevYear, _prevMonth],
+              function(err, rows) {
+                if (err) throw err;
+
+                if (rows.length > 0) {
+                  var _row = rows[0];
+                  _result.prevTotal = _row.score;
+                }
+
+                res.json(_result);
+
+              }
+            );
+
+          }
+        );
+
       }
     }
   );
