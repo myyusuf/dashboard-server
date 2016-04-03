@@ -16,7 +16,8 @@ exports.netProfit = function(req, res, db) {
     year: _year,
     netProfit: 0,
     prevNetProfit: 0,
-    rkap: 0
+    rkap: 0,
+    prevRkap: 0
   }
 
   var _query = "SELECT * FROM laba_bersih WHERE tahun=? and bulan=?";
@@ -44,6 +45,7 @@ exports.netProfit = function(req, res, db) {
           if (rows.length > 0) {
             var _row = rows[0];
             _result.prevNetProfit = _row.laba_bersih;
+            _result.prevRkap = _row.rkap;
           }
 
           res.json(_result);
