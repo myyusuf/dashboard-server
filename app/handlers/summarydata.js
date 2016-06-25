@@ -417,8 +417,11 @@ exports.smwg = function(req, res, db) {
 
   var _result = {
     qmsl: 0,
+    qmslTotalScore: 0,
     sheLevel: 0,
+    sheLevelTotalScore: 0,
     limaR: 0,
+    limaRTotalScore: 0,
     scoreTarget: {},
     projectCount: {
       qmsl: 0,
@@ -459,16 +462,19 @@ exports.smwg = function(req, res, db) {
               if (_row.score >= _scoreTarget.qmsl) {
                 _result.qmsl++;
               }
+              _result.qmslTotalScore += _row.score
               _result.projectCount.qmsl++;
             } else if (_row.parameter_smwg == 'SHE_LEVEL') {
               if (_row.score >= _scoreTarget.sheLevel) {
                 _result.sheLevel++;
               }
+              _result.sheLevelTotalScore += _row.score
               _result.projectCount.sheLevel++;
             } else if (_row.parameter_smwg == '5R') {
               if (_row.score >= _scoreTarget.limaR) {
                 _result.limaR++;
               }
+              _result.limaRTotalScore += _row.score
               _result.projectCount.limaR++;
             }
           }
