@@ -1,6 +1,8 @@
 var summaryData = require('./handlers/summarydata.js');
 var summaryPdf = require('./handlers/summarypdf.js');
 
+var drillDownData = require('./handlers/drilldowndata.js');
+
 module.exports = function(app, passport, db) {
 
   // =====================================
@@ -112,6 +114,12 @@ module.exports = function(app, passport, db) {
 
   app.get('/showpdf/:fileName/:year/:month/:dummy', function(req, res) {
     summaryPdf.downloadPdf(req, res, db);
+  });
+
+  //--------------------
+
+  app.get('/drilldowndata/total_kontrak_dihadapi/:year/:month', function(req, res) {
+    drillDownData.kontrakDihadapi(req, res, db);
   });
 
 };
