@@ -15,6 +15,7 @@ exports.kontrakDihadapi = function(req, res, db) {
 
   var _jsonTotalKontrakDihadapi = {};
   var _jsonSisaKontrakDihadapi = {};
+  var _jsonPesananBaruKontrakDihadapi = {};
 
   var _result = {
     month: _month,
@@ -58,6 +59,24 @@ exports.kontrakDihadapi = function(req, res, db) {
     );
   };
 
+  var _getPesananBaruKontrakDihadapi = function(callback){
+    var _query = "SELECT * FROM db_mobile_pesanan_baru_kontrak_dihadapi WHERE tahun=? and bulan=?";
+
+    db.query(
+      _query, [_year, _month],
+      function(err, rows) {
+        if (err) throw err;
+
+        if (rows.length > 0) {
+          var _row = rows[0];
+          _jsonPesananBaruKontrakDihadapi = JSON.parse(_row.data).pesananBaruKontrakDihadapi;
+        }
+
+        callback();
+      }
+    );
+  };
+
   flow.series([
       function (callback) {
           _getTotalKontrakDihadapi(callback);
@@ -66,11 +85,37 @@ exports.kontrakDihadapi = function(req, res, db) {
           _getSisaKontrakDihadapi(callback);
       },
       function (callback) {
+          _getPesananBaruKontrakDihadapi(callback);
+      },
+      function (callback) {
           _result.jsonData['totalKontrakDihadapi'] = _jsonTotalKontrakDihadapi;
           _result.jsonData['sisaKontrakDihadapi'] = _jsonSisaKontrakDihadapi;
+          _result.jsonData['pesananBaruKontrakDihadapi'] = _jsonPesananBaruKontrakDihadapi;
           res.json(_result);
       }
   ]);
+};
 
+exports.projectInfoDD = function(req, res, db) {
 
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var query = "SELECT * FROM db_mobile_info_proyek WHERE  tahun=? and bulan=?";
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+      var _result = [];
+
+      for (var _i in rows) {
+        var _row = rows[_i];
+        _result.push(JSON.parse(_row.data_proyek).infoProyek);
+      }
+
+      res.json(_result);
+
+    }
+  );
 };

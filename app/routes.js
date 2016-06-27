@@ -122,6 +122,10 @@ module.exports = function(app, passport, db) {
     drillDownData.kontrakDihadapi(req, res, db);
   });
 
+  app.get('/drilldowndata/project-info-dd/:year/:month', function(req, res) {
+    drillDownData.projectInfoDD(req, res, db);
+  });
+
 };
 
 // route middleware to make sure
