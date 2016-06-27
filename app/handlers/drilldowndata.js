@@ -16,6 +16,9 @@ exports.kontrakDihadapi = function(req, res, db) {
   var _jsonTotalKontrakDihadapi = {};
   var _jsonSisaKontrakDihadapi = {};
   var _jsonPesananBaruKontrakDihadapi = {};
+  var _jsonTotalPenjualan = {};
+  var _jsonPenjualanLama = {};
+  var _jsonPenjualanBaru = {};
 
   var _result = {
     month: _month,
@@ -77,6 +80,60 @@ exports.kontrakDihadapi = function(req, res, db) {
     );
   };
 
+  var _getTotalPenjualan = function(callback){
+    var _query = "SELECT * FROM db_mobile_total_penjualan WHERE tahun=? and bulan=?";
+
+    db.query(
+      _query, [_year, _month],
+      function(err, rows) {
+        if (err) throw err;
+
+        if (rows.length > 0) {
+          var _row = rows[0];
+          _jsonTotalPenjualan = JSON.parse(_row.data).totalPenjualan;
+        }
+
+        callback();
+      }
+    );
+  };
+
+  var _getPenjualanLama = function(callback){
+    var _query = "SELECT * FROM db_mobile_penjualan_lama WHERE tahun=? and bulan=?";
+
+    db.query(
+      _query, [_year, _month],
+      function(err, rows) {
+        if (err) throw err;
+
+        if (rows.length > 0) {
+          var _row = rows[0];
+          _jsonPenjualanLama = JSON.parse(_row.data).penjualanLama;
+        }
+
+        callback();
+      }
+    );
+  };
+
+  var _getPenjualanBaru = function(callback){
+    var _query = "SELECT * FROM db_mobile_penjualan_baru WHERE tahun=? and bulan=?";
+
+    db.query(
+      _query, [_year, _month],
+      function(err, rows) {
+        if (err) throw err;
+
+        if (rows.length > 0) {
+          var _row = rows[0];
+          _jsonPenjualanBaru = JSON.parse(_row.data).penjualanBaru;
+        }
+
+        callback();
+      }
+    );
+  };
+
   flow.series([
       function (callback) {
           _getTotalKontrakDihadapi(callback);
@@ -88,9 +145,21 @@ exports.kontrakDihadapi = function(req, res, db) {
           _getPesananBaruKontrakDihadapi(callback);
       },
       function (callback) {
+          _getTotalPenjualan(callback);
+      },
+      function (callback) {
+          _getPenjualanLama(callback);
+      },
+      function (callback) {
+          _getPenjualanBaru(callback);
+      },
+      function (callback) {
           _result.jsonData['totalKontrakDihadapi'] = _jsonTotalKontrakDihadapi;
           _result.jsonData['sisaKontrakDihadapi'] = _jsonSisaKontrakDihadapi;
           _result.jsonData['pesananBaruKontrakDihadapi'] = _jsonPesananBaruKontrakDihadapi;
+          _result.jsonData['totalPenjualan'] = _jsonTotalPenjualan;
+          _result.jsonData['penjualanLama'] = _jsonPenjualanLama;
+          _result.jsonData['penjualanBaru'] = _jsonPenjualanBaru;
           res.json(_result);
       }
   ]);
