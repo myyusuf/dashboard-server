@@ -29,6 +29,11 @@ exports.kontrakDihadapi = function(req, res, db) {
   var _jsonPphFinalLama = {};
   var _jsonPphFinalBaru = {};
 
+  var _jsonTotalLabaKotorStlhPphFinal = {};
+  var _jsonLabaKotorStlhPphFinalLama = {};
+  var _jsonLabaKotorStlhPphFinalBaru = {};
+  var _jsonEfisiensiLabaKotorStlhPphFinal = {};
+
   var _result = {
     month: _month,
     year: _year,
@@ -253,6 +258,79 @@ exports.kontrakDihadapi = function(req, res, db) {
     );
   };
 
+  //-----
+    var _getTotalLabaKotorStlhPphFinal = function(callback){
+      var _query = "SELECT * FROM db_mobile_total_laba_kotor_stlh_pph_final WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonTotalLabaKotorStlhPphFinal = JSON.parse(_row.data).totalLabaKotorStlhPphFinal;
+          }
+
+          callback();
+        }
+      );
+    };
+
+    var _getLabaKotorStlhPphFinalLama = function(callback){
+      var _query = "SELECT * FROM db_mobile_laba_kotor_stlh_pph_final_lama WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonLabaKotorStlhPphFinalLama = JSON.parse(_row.data).labaKotorStlhPphFinalLama;
+          }
+
+          callback();
+        }
+      );
+    };
+
+    var _getLabaKotorStlhPphFinalBaru = function(callback){
+      var _query = "SELECT * FROM db_mobile_laba_kotor_stlh_pph_final_baru WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonLabaKotorStlhPphFinalBaru = JSON.parse(_row.data).labaKotorStlhPphFinalBaru;
+          }
+
+          callback();
+        }
+      );
+    };
+
+    var _getEfisiensiLabaKotorStlhPphFinal = function(callback){
+      var _query = "SELECT * FROM db_mobile_efisiensi_laba_kotor_stlh_pph_final WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonEfisiensiLabaKotorStlhPphFinal = JSON.parse(_row.data).efisiensiInefisiensilabaKotorStlhPphFinal;
+          }
+
+          callback();
+        }
+      );
+    };
+
   flow.series([
       function (callback) {
           _getTotalKontrakDihadapi(callback);
@@ -290,6 +368,19 @@ exports.kontrakDihadapi = function(req, res, db) {
       function (callback) {
           _getPphFinalBaru(callback);
       },
+
+      function (callback) {
+          _getTotalLabaKotorStlhPphFinal(callback);
+      },
+      function (callback) {
+          _getLabaKotorStlhPphFinalLama(callback);
+      },
+      function (callback) {
+          _getLabaKotorStlhPphFinalBaru(callback);
+      },
+      function (callback) {
+          _getEfisiensiLabaKotorStlhPphFinal(callback);
+      },
       function (callback) {
           _result.jsonData['totalKontrakDihadapi'] = _jsonTotalKontrakDihadapi;
           _result.jsonData['sisaKontrakDihadapi'] = _jsonSisaKontrakDihadapi;
@@ -306,6 +397,11 @@ exports.kontrakDihadapi = function(req, res, db) {
           _result.jsonData['totalPphFinal'] = _jsonTotalPphFinal;
           _result.jsonData['pphFinalLama'] = _jsonPphFinalLama;
           _result.jsonData['pphFinalBaru'] = _jsonPphFinalBaru;
+
+          _result.jsonData['totalLabaKotorStlhPphFinal'] = _jsonTotalLabaKotorStlhPphFinal;
+          _result.jsonData['labaKotorStlhPphFinalLama'] = _jsonLabaKotorStlhPphFinalLama;
+          _result.jsonData['labaKotorStlhPphFinalBaru'] = _jsonLabaKotorStlhPphFinalBaru;
+          _result.jsonData['efisiensiInefisiensilabaKotorStlhPphFinal'] = _jsonEfisiensiLabaKotorStlhPphFinal;
           res.json(_result);
       }
   ]);
