@@ -34,6 +34,12 @@ exports.kontrakDihadapi = function(req, res, db) {
   var _jsonLabaKotorStlhPphFinalBaru = {};
   var _jsonEfisiensiLabaKotorStlhPphFinal = {};
 
+  var _jsonBiayaUsaha= {};
+
+  var _jsonLabaUsaha= {};
+  var _jsonLabaUsahaLspLabaRugiLain= {};
+  var _jsonLabaSebelumPajak= {};
+
   var _result = {
     month: _month,
     year: _year,
@@ -330,6 +336,78 @@ exports.kontrakDihadapi = function(req, res, db) {
         }
       );
     };
+//----------
+    var _getBiayaUsaha = function(callback){
+      var _query = "SELECT * FROM db_mobile_biaya_usaha WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonBiayaUsaha = JSON.parse(_row.data).biayaUsaha;
+          }
+
+          callback();
+        }
+      );
+    };
+//---------
+    var _getLabaUsaha = function(callback){
+      var _query = "SELECT * FROM db_mobile_laba_usaha WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonLabaUsaha = JSON.parse(_row.data).labaUsaha;
+          }
+
+          callback();
+        }
+      );
+    };
+
+    var _getLabaUsahaLspLabaRugiLain = function(callback){
+      var _query = "SELECT * FROM db_mobile_laba_usaha_lsp_laba_rugi_lain WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonLabaUsahaLspLabaRugiLain = JSON.parse(_row.data).labaUsahaLspLabaRugiLain;
+          }
+
+          callback();
+        }
+      );
+    };
+
+    var _getLabaSebelumPajak = function(callback){
+      var _query = "SELECT * FROM db_mobile_laba_sebelum_pajak WHERE tahun=? and bulan=?";
+
+      db.query(
+        _query, [_year, _month],
+        function(err, rows) {
+          if (err) throw err;
+
+          if (rows.length > 0) {
+            var _row = rows[0];
+            _jsonLabaSebelumPajak = JSON.parse(_row.data).labaSebelumPajak;
+          }
+
+          callback();
+        }
+      );
+    };
 
   flow.series([
       function (callback) {
@@ -381,6 +459,20 @@ exports.kontrakDihadapi = function(req, res, db) {
       function (callback) {
           _getEfisiensiLabaKotorStlhPphFinal(callback);
       },
+
+      function (callback) {
+          _getBiayaUsaha(callback);
+      },
+
+      function (callback) {
+          _getLabaUsaha(callback);
+      },
+      function (callback) {
+          _getLabaUsahaLspLabaRugiLain(callback);
+      },
+      function (callback) {
+          _getLabaSebelumPajak(callback);
+      },
       function (callback) {
           _result.jsonData['totalKontrakDihadapi'] = _jsonTotalKontrakDihadapi;
           _result.jsonData['sisaKontrakDihadapi'] = _jsonSisaKontrakDihadapi;
@@ -402,6 +494,12 @@ exports.kontrakDihadapi = function(req, res, db) {
           _result.jsonData['labaKotorStlhPphFinalLama'] = _jsonLabaKotorStlhPphFinalLama;
           _result.jsonData['labaKotorStlhPphFinalBaru'] = _jsonLabaKotorStlhPphFinalBaru;
           _result.jsonData['efisiensiInefisiensilabaKotorStlhPphFinal'] = _jsonEfisiensiLabaKotorStlhPphFinal;
+
+          _result.jsonData['biayaUsaha'] = _jsonBiayaUsaha;
+
+          _result.jsonData['labaUsaha'] = _jsonLabaUsaha;
+          _result.jsonData['labaUsahaLspLabaRugiLain'] = _jsonLabaUsahaLspLabaRugiLain;
+          _result.jsonData['labaSebelumPajak'] = _jsonLabaSebelumPajak;
           res.json(_result);
       }
   ]);
