@@ -3,6 +3,8 @@ var summaryPdf = require('./handlers/summarypdf.js');
 
 var drillDownData = require('./handlers/drilldowndata.js');
 
+var projectData = require('./handlers/projectdata.js');
+
 module.exports = function(app, passport, db) {
 
   // =====================================
@@ -114,6 +116,10 @@ module.exports = function(app, passport, db) {
 
   app.get('/showpdf/:fileName/:year/:month/:dummy', function(req, res) {
     summaryPdf.downloadPdf(req, res, db);
+  });
+
+  app.get('/project-image/:projectCode/:imageCode', function(req, res) {
+    projectData.viewImage(req, res, db);
   });
 
   //--------------------
