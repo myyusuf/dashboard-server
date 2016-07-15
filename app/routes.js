@@ -132,6 +132,10 @@ module.exports = function(app, passport, db) {
     drillDownData.projectInfoDD(req, res, db);
   });
 
+  app.get('/drilldowndata/qmsl-dd/:year/:month', function(req, res) {
+    drillDownData.qmslDD(req, res, db);
+  });
+
 };
 
 // route middleware to make sure
