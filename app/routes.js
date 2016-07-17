@@ -136,6 +136,14 @@ module.exports = function(app, passport, db) {
     drillDownData.qmslDD(req, res, db);
   });
 
+  app.get('/drilldowndata/she-level-dd/:year/:month', function(req, res) {
+    drillDownData.sheLevelDD(req, res, db);
+  });
+
+  app.get('/drilldowndata/lima-r-dd/:year/:month', function(req, res) {
+    drillDownData.limaRDD(req, res, db);
+  });
+
 };
 
 // route middleware to make sure
