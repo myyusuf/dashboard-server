@@ -612,7 +612,7 @@ exports.scoreCardDD = function(req, res, db) {
     function(err, rows) {
       if (err) throw err;
 
-      var _result = [];
+      var _result = {};
 
       if (rows.length > 0) {
         var _row = rows[0];
