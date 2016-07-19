@@ -144,6 +144,10 @@ module.exports = function(app, passport, db) {
     drillDownData.limaRDD(req, res, db);
   });
 
+  app.get('/drilldowndata/score-card-dd/:year/:month', function(req, res) {
+    drillDownData.scoreCardDD(req, res, db);
+  });
+
 };
 
 // route middleware to make sure

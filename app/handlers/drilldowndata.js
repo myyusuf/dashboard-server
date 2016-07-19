@@ -600,3 +600,27 @@ exports.limaRDD = function(req, res, db) {
     }
   );
 };
+
+exports.scoreCardDD = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var query = "SELECT * FROM db_mobile_score_card WHERE tahun=? and bulan=?";
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+      var _result = [];
+
+      if (rows.length > 0) {
+        var _row = rows[0];
+        _result = JSON.parse(_row.data).scoreCard;
+      }
+
+      res.json(_result);
+
+    }
+  );
+};
