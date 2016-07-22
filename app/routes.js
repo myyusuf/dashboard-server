@@ -148,6 +148,10 @@ module.exports = function(app, passport, db) {
     drillDownData.scoreCardDD(req, res, db);
   });
 
+  app.get('/drilldowndata/property-dd/:year/:month', function(req, res) {
+    drillDownData.propertyDD(req, res, db);
+  });
+
 };
 
 // route middleware to make sure
