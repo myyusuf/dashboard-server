@@ -643,9 +643,69 @@ exports.scoreCardDD = function(req, res, db) {
       if (rows.length > 0) {
         var _row = rows[0];
         _result = JSON.parse(_row.data).scoreCard;
+
+        if("WGPUS001" === _projectId){
+          if(_month == 12){
+            _month = 1
+            _year = _year - 1
+          }else{
+            _month = _month - 1;
+          }
+
+          //------------------------------
+          var query = "SELECT * FROM db_mobile_score_card WHERE id_proyek=? and tahun=? and bulan=?";
+          db.query(
+            query, [_projectId, _year, _month],
+            function(err, rows) {
+              if (err) throw err;
+
+              var _prevScoreCard = {};
+
+              if (rows.length > 0) {
+                var _row = rows[0];
+                _prevScoreCard = JSON.parse(_row.data).scoreCard;
+                _result.kinerjaProdukProses.inovasi.score['prevRi'] = _prevScoreCard.kinerjaProdukProses.inovasi.score.ri;
+                _result.kinerjaProdukProses.qsheExcel.score['prevRi'] = _prevScoreCard.kinerjaProdukProses.qsheExcel.score.ri;
+                _result.kinerjaProdukProses.competitiveIndex.score['prevRi'] = _prevScoreCard.kinerjaProdukProses.competitiveIndex.score.ri;
+
+                _result.kinerjaFokusPelanggan.csi.score['prevRi'] = _prevScoreCard.kinerjaFokusPelanggan.csi.score.ri;
+
+                _result.kinerjaKeuanganPasar.netProfit.score['prevRi'] = _prevScoreCard.kinerjaKeuanganPasar.netProfit.score.ri;
+                _result.kinerjaKeuanganPasar.arusKasOperasi.score['prevRi'] = _prevScoreCard.kinerjaKeuanganPasar.arusKasOperasi.score.ri;
+                _result.kinerjaKeuanganPasar.okBaru.score['prevRi'] = _prevScoreCard.kinerjaKeuanganPasar.okBaru.score.ri;
+                _result.kinerjaKeuanganPasar.penjualanThdKontrakDihadapi.score['prevRi'] = _prevScoreCard.kinerjaKeuanganPasar.penjualanThdKontrakDihadapi.score.ri;
+
+                _result.kinerjaFokusTenagaKerja.hcEngagementLevel.score['prevRi'] = _prevScoreCard.kinerjaFokusTenagaKerja.hcEngagementLevel.score.ri;
+
+                _result.kinerjaKepemimpinanTataKelola.gcgLevel.score['prevRi'] = _prevScoreCard.kinerjaKepemimpinanTataKelola.gcgLevel.score.ri;
+                _result.kinerjaKepemimpinanTataKelola.riskMaturityLevel.score['prevRi'] = _prevScoreCard.kinerjaKepemimpinanTataKelola.riskMaturityLevel.score.ri;
+              }else{
+                _result.kinerjaProdukProses.inovasi.score['prevRi'] = 0;
+                _result.kinerjaProdukProses.qsheExcel.score['prevRi'] = 0
+                _result.kinerjaProdukProses.competitiveIndex.score['prevRi'] = 0;
+
+                _result.kinerjaFokusPelanggan.csi.score['prevRi'] = 0;
+
+                _result.kinerjaKeuanganPasar.netProfit.score['prevRi'] = 0;
+                _result.kinerjaKeuanganPasar.arusKasOperasi.score['prevRi'] = 0;
+                _result.kinerjaKeuanganPasar.okBaru.score['prevRi'] = 0;
+                _result.kinerjaKeuanganPasar.penjualanThdKontrakDihadapi.score['prevRi'] = 0;
+
+                _result.kinerjaFokusTenagaKerja.hcEngagementLevel.score['prevRi'] = 0;
+
+                _result.kinerjaKepemimpinanTataKelola.riskMaturityLevel.score['prevRi'] = 0;
+              }
+
+              res.json(_result);
+
+            }
+          );
+          //------------------------------
+
+        }
       }
 
-      res.json(_result);
+
 
     }
   );
