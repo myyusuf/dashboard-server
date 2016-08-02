@@ -693,6 +693,7 @@ exports.scoreCardDD = function(req, res, db) {
 
                 _result.kinerjaFokusTenagaKerja.hcEngagementLevel.score['prevRi'] = 0;
 
+                _result.kinerjaKepemimpinanTataKelola.gcgLevel.score['prevRi'] = 0;
                 _result.kinerjaKepemimpinanTataKelola.riskMaturityLevel.score['prevRi'] = 0;
               }
 
