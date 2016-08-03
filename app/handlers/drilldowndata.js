@@ -703,6 +703,8 @@ exports.scoreCardDD = function(req, res, db) {
           );
           //------------------------------
 
+        }else{
+          res.json(_result);
         }
       }
 
