@@ -114,6 +114,10 @@ module.exports = function(app, passport, db) {
     summaryData.smwg(req, res, db);
   });
 
+  app.get('/summarydata/data-progress/:year/:month', function(req, res) {
+    summaryData.dataProgress(req, res, db);
+  });
+
   app.get('/showpdf/:fileName/:year/:month/:dummy', function(req, res) {
     summaryPdf.downloadPdf(req, res, db);
   });

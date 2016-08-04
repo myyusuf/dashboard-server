@@ -489,3 +489,29 @@ exports.smwg = function(req, res, db) {
     }
   );
 }
+
+exports.dataProgress = function(req, res, db) {
+
+  var _year = req.params.year;
+  var _month = req.params.month;
+
+  var query = "SELECT * FROM db_mobile_data_progress WHERE tahun=? and bulan=?";
+  db.query(
+    query, [_year, _month],
+    function(err, rows) {
+      if (err) throw err;
+
+      var _result = {
+        data_progress: 0
+      };
+
+      if (rows.length > 0) {
+        var _row = rows[0];
+        _result.data_progress = _row.data_progress;
+      }
+
+      res.json(_result);
+
+    }
+  );
+};
