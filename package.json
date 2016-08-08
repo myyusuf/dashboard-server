@@ -17,6 +17,7 @@
     "nimble": "0.0.2",
     "node-uuid": "^1.4.7",
     "passport": "~0.1.17",
+    "passport-http": "^0.3.0",
     "passport-local": "~0.1.6"
   }
 }

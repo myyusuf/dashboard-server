@@ -79,10 +79,14 @@ module.exports = function(app, passport, db) {
     });
   });
 
+  app.get('/mobilelogin', passport.authenticate('basic', { session: false }),function(req, res) {
+    res.json({loggedIn: true});
+  });
+
   // =====================================
   // Summary Data ========================
   // =====================================
-  app.get('/summarydata/net-profit/:year/:month', function(req, res) {
+  app.get('/summarydata/net-profit/:year/:month', passport.authenticate('basic', { session: false }),function(req, res) {
     summaryData.netProfit(req, res, db);
   });
 
