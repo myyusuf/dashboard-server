@@ -126,7 +126,7 @@ module.exports = function(app, passport, db) {
     summaryPdf.downloadPdf(req, res, db);
   });
 
-  app.get('/project-image/:projectCode/:imageCode', passport.authenticate('basic', { session: false }), function(req, res) {
+  app.get('/project-image/:projectCode/:imageCode', function(req, res) {
     projectData.viewImage(req, res, db);
   });
 
