@@ -2,6 +2,10 @@
 
 // set up ======================================================================
 // get all the tools we need
+
+var fs = require('fs');
+var https = require('https');
+
 var express  = require('express');
 var app      = express();
 var port     = process.env.PORT || 3000;
@@ -76,5 +80,14 @@ app.set('view engine', 'handlebars');
 app.use(express.static(__dirname + '/public'));
 
 // launch ======================================================================
-app.listen(port);
+// app.listen(port);
+var options = {
+  //  key  : fs.readFileSync('/Users/myyusuf/Documents/Test/myhttps/server.key'),
+  //  cert : fs.readFileSync('/Users/myyusuf/Documents/Test/myhttps/server.crt')
+	key  : fs.readFileSync('/apps/ssl/commercial.key'),
+	cert : fs.readFileSync('/apps/ssl/commercial.crt')
+};
+https.createServer(options, app).listen(3000, function () {
+   console.log('Started with https.');
+});
 console.log('The magic happens on port ' + port);
