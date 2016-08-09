@@ -352,8 +352,6 @@ exports.financialChartData = function(req, res, db) {
     function(err, rows) {
       if (err) throw err;
 
-      console.log('_year x:  ' + _year);
-
       var _result = [];
 
       for (var _i in rows) {

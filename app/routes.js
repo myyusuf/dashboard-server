@@ -90,77 +90,77 @@ module.exports = function(app, passport, db) {
     summaryData.netProfit(req, res, db);
   });
 
-  app.get('/summarydata/project-info/:year/:month', function(req, res) {
+  app.get('/summarydata/project-info/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.projectInfo(req, res, db);
   });
 
-  app.get('/summarydata/score-card/:year/:month', function(req, res) {
+  app.get('/summarydata/score-card/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.scoreCard(req, res, db);
   });
 
-  app.get('/summarydata/risk-info/:year/:month', function(req, res) {
+  app.get('/summarydata/risk-info/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.riskInfo(req, res, db);
   });
 
-  app.get('/summarydata/financial/:year', function(req, res) {
+  app.get('/summarydata/financial/:year', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.financialChartData(req, res, db);
   });
 
-  app.get('/summarydata/sales/:year', function(req, res) {
+  app.get('/summarydata/sales/:year', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.salesChartData(req, res, db);
   });
 
-  app.get('/summarydata/wg-property-list/:year/:month', function(req, res) {
+  app.get('/summarydata/wg-property-list/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.wgPropertyList(req, res, db);
   });
 
-  app.get('/summarydata/smwg/:year/:month', function(req, res) {
+  app.get('/summarydata/smwg/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.smwg(req, res, db);
   });
 
-  app.get('/summarydata/data-progress/:year/:month', function(req, res) {
+  app.get('/summarydata/data-progress/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryData.dataProgress(req, res, db);
   });
 
-  app.get('/showpdf/:fileName/:year/:month/:dummy', function(req, res) {
+  app.get('/showpdf/:fileName/:year/:month/:dummy', passport.authenticate('basic', { session: false }), function(req, res) {
     summaryPdf.downloadPdf(req, res, db);
   });
 
-  app.get('/project-image/:projectCode/:imageCode', function(req, res) {
+  app.get('/project-image/:projectCode/:imageCode', passport.authenticate('basic', { session: false }), function(req, res) {
     projectData.viewImage(req, res, db);
   });
 
   //--------------------
 
-  app.get('/drilldowndata/total_kontrak_dihadapi/:year/:month', function(req, res) {
+  app.get('/drilldowndata/total_kontrak_dihadapi/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.kontrakDihadapi(req, res, db);
   });
 
-  app.get('/drilldowndata/project-info-dd/:year/:month', function(req, res) {
+  app.get('/drilldowndata/project-info-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.projectInfoDD(req, res, db);
   });
 
-  app.get('/drilldowndata/project-info-dd-details/:projectId/:year/:month', function(req, res) {
+  app.get('/drilldowndata/project-info-dd-details/:projectId/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.projectInfoDDDetails(req, res, db);
   });
 
-  app.get('/drilldowndata/qmsl-dd/:year/:month', function(req, res) {
+  app.get('/drilldowndata/qmsl-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.qmslDD(req, res, db);
   });
 
-  app.get('/drilldowndata/she-level-dd/:year/:month', function(req, res) {
+  app.get('/drilldowndata/she-level-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.sheLevelDD(req, res, db);
   });
 
-  app.get('/drilldowndata/lima-r-dd/:year/:month', function(req, res) {
+  app.get('/drilldowndata/lima-r-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.limaRDD(req, res, db);
   });
 
-  app.get('/drilldowndata/score-card-dd/:projectId/:year/:month', function(req, res) {
+  app.get('/drilldowndata/score-card-dd/:projectId/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.scoreCardDD(req, res, db);
   });
 
-  app.get('/drilldowndata/property-dd/:year/:month', function(req, res) {
+  app.get('/drilldowndata/property-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.propertyDD(req, res, db);
   });
 

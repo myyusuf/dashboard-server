@@ -39,8 +39,8 @@ module.exports = function(passport) {
         //   if (!user.verifyPassword(password)) { return done(null, false); }
         //   return done(null, user);
         // });
-        console.log('userid : ' + userid);
-        console.log('password : ' + password);
+        // console.log('userid : ' + userid);
+        // console.log('password : ' + password);
 
         var user = {id: 1, username: 'iedfian', password: 'admin'};
         return done(null, user);
