@@ -8,7 +8,7 @@ var BasicStrategy   = require('passport-http').BasicStrategy;
 // var User       		= require('../app/models/user');
 
 // expose this function to our app using module.exports
-module.exports = function(passport) {
+module.exports = function(passport, db) {
 
 	// =========================================================================
     // passport session setup ==================================================
@@ -18,7 +18,7 @@ module.exports = function(passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function(user, done) {
-        done(null, user.id);
+        done(null, user.username);
     });
 
     // used to deserialize the user
@@ -42,8 +42,28 @@ module.exports = function(passport) {
         // console.log('userid : ' + userid);
         // console.log('password : ' + password);
 
-        var user = {id: 1, username: 'iedfian', password: 'admin'};
-        return done(null, user);
+        var _user = {};
+
+        var _query = "SELECT * FROM db_mobile_user WHERE username=? ";
+
+        db.query(
+          _query, [userid],
+          function(err, rows) {
+            if (err) throw err;
+
+            if (rows.length > 0) {
+              var _row = rows[0];
+              _user['username'] = _row.username;
+              _user['password'] = _row.password;
+              _user['name'] = _row.name;
+              _user['email'] = _row.email;
+
+              return done(null, _user);
+            }else{
+              return done(null, false);
+            }
+          }
+        );
       }
     ));
 

@@ -21,7 +21,10 @@ var configDB = require('./config/database.js');
 
 // configuration ===============================================================
 
-require('./config/passport')(passport); // pass passport for configuration
+//Mysql
+var db = mysql.createConnection(configDB.mysqlConnectionData);
+
+require('./config/passport')(passport, db); // pass passport for configuration
 
 // set up our express application
 //app.use(express.logger('dev')); // log every request to the console
@@ -34,9 +37,6 @@ app.use(session({ secret: 'ilovescotchscotchyscotchscotch' })); // session secre
 app.use(passport.initialize());
 app.use(passport.session()); // persistent login sessions
 app.use(flash()); // use connect-flash for flash messages stored in session
-
-//Mysql
-var db = mysql.createConnection(configDB.mysqlConnectionData);
 
 // routes ======================================================================
 require('./app/routes.js')(app, passport, db); // load our routes and pass in our app and fully configured passport
