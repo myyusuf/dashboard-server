@@ -26,9 +26,29 @@ module.exports = function(passport, db) {
         /*User.findById(id, function(err, user) {
             done(err, user);
         });*/
+        var _user = {};
 
-        var user = {id: 1, email: 'iedfian.taufiq.akbar@gmail.com', password: 'admin'};
-        return done(null, user);
+        var _query = "SELECT * FROM db_mobile_user WHERE username=? ";
+
+        db.query(
+          _query, [id],
+          function(err, rows) {
+            if (err) throw err;
+
+            if (rows.length > 0) {
+              var _row = rows[0];
+              _user['username'] = _row.username;
+              _user['password'] = _row.password;
+              _user['name'] = _row.name;
+              _user['email'] = _row.email;
+
+              return done(null, _user);
+            }else{
+              return done(null, false);
+            }
+          }
+        );
+
     });
 
     passport.use(new BasicStrategy(
