@@ -78,6 +78,12 @@ module.exports = function(passport, db) {
               _user['name'] = _row.name;
               _user['email'] = _row.email;
 
+              if(password == _row.password){
+                return done(null, _user);
+              }else{
+                return done(null, false);
+              }
+
               return done(null, _user);
             }else{
               return done(null, false);
