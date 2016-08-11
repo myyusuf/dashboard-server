@@ -83,8 +83,6 @@ module.exports = function(passport, db) {
               }else{
                 return done(null, false);
               }
-
-              return done(null, _user);
             }else{
               return done(null, false);
             }
