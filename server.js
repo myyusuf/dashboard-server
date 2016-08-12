@@ -8,7 +8,7 @@ var https = require('https');
 
 var express  = require('express');
 var app      = express();
-var port     = process.env.PORT || 3000;
+var port     = process.env.PORT || 80;
 var passport = require('passport');
 var flash    = require('connect-flash');
 var morgan       = require('morgan');
@@ -84,10 +84,12 @@ app.use(express.static(__dirname + '/public'));
 var options = {
   //  key  : fs.readFileSync('/Users/myyusuf/Documents/Test/myhttps/server.key'),
   //  cert : fs.readFileSync('/Users/myyusuf/Documents/Test/myhttps/server.crt')
-	key  : fs.readFileSync('/apps/ssl/commercial.key'),
-	cert : fs.readFileSync('/apps/ssl/commercial.crt')
+	// key  : fs.readFileSync('/apps/ssl/commercial.key'),
+	// cert : fs.readFileSync('/apps/ssl/commercial.crt')
+	key  : fs.readFileSync('/var/dashboard_ssl/wgdashboard.key'),
+	cert : fs.readFileSync('/var/dashboard_ssl/www_wgdashboard_com.crt')
 };
-https.createServer(options, app).listen(3000, function () {
+https.createServer(options, app).listen(port, function () {
    console.log('Started with https.');
 });
 console.log('The magic happens on port ' + port);
