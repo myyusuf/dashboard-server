@@ -5,6 +5,8 @@ var drillDownData = require('./handlers/drilldowndata.js');
 
 var projectData = require('./handlers/projectdata.js');
 
+var employeeData = require('./handlers/employeedata.js');
+
 module.exports = function(app, passport, db) {
 
   // =====================================
@@ -162,6 +164,10 @@ module.exports = function(app, passport, db) {
 
   app.get('/drilldowndata/property-dd/:year/:month', passport.authenticate('basic', { session: false }), function(req, res) {
     drillDownData.propertyDD(req, res, db);
+  });
+
+  app.get('/employeedata/birthday/:month', passport.authenticate('basic', { session: false }),function(req, res) {
+    employeeData.birthdayData(req, res, db);
   });
 
 };
