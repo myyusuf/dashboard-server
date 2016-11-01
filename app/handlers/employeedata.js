@@ -12,3 +12,18 @@ exports.birthdayData = function(req, res, db) {
     }
   );
 };
+
+exports.birthdayDataCount = function(req, res, db){
+
+  var _month = req.params.month;
+
+  var query = "SELECT count(1) as totalRecords FROM db_mobile_ulang_tahun WHERE bulan = ? ";
+  db.query(
+    query, [_month],
+    function(err, rows) {
+      if (err) throw err;
+      var totalRecords = rows[0].totalRecords;
+      res.json({totalRecords: totalRecords});
+    }
+  );
+};

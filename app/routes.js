@@ -166,6 +166,9 @@ module.exports = function(app, passport, db) {
     drillDownData.propertyDD(req, res, db);
   });
 
+  app.get('/employeedata/birthdaycount/:month', passport.authenticate('basic', { session: false }),function(req, res) {
+    employeeData.birthdayDataCount(req, res, db);
+  });
   app.get('/employeedata/birthday/:month', passport.authenticate('basic', { session: false }),function(req, res) {
     employeeData.birthdayData(req, res, db);
   });
