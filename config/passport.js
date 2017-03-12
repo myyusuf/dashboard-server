@@ -79,7 +79,24 @@ module.exports = function(passport, db) {
               _user['email'] = _row.email;
 
               if(password == _row.password){
-                return done(null, _user);
+
+                //update last login ------
+                db.query(
+                'UPDATE db_mobile_user SET last_login = ? '+
+                'WHERE username = ? ',
+                [
+                  new Date(),
+                  userid
+                ],
+                function (err, result) {
+                  if(err){
+                    res.status(500).send('Error while doing operation.');
+                  }else{
+                    return done(null, _user);
+                  }
+                });
+                //------------------------
+
               }else{
                 return done(null, false);
               }
